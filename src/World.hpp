@@ -5,6 +5,7 @@
 #include "TextureHolder.hpp"
 #include "SceneNode.hpp"
 #include "Aircraft.hpp"
+#include "Command.hpp"
 
 class World : private sf::NonCopyable
 {
@@ -12,6 +13,7 @@ public:
   explicit World(sf::RenderWindow &window);
   void update(sf::Time deltaTime);
   void draw();
+  CommandQueue &getCommandQueue();
 
 private:
   enum Layer
@@ -30,6 +32,7 @@ private:
   sf::Vector2f _spawnPosition;
   float _scrollSpeed;
   Aircraft *_player;
+  CommandQueue _commandQueue;
 
   void loadTextures();
   void buildScene();

@@ -12,13 +12,10 @@ public:
     Eagle,
   };
 
-  explicit Aircraft(Type type, Category::Type category, const TextureHolder &textureHolder);
-  void accelerate(sf::Vector2f acceleration);
-  virtual unsigned int getCategory() const override;
+  explicit Aircraft(Type type, const TextureHolder &textureHolder);
 
 private:
   Type _type;
-  Category::Type _category;
   sf::Sprite _sprite;
   virtual void drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const override;
 };

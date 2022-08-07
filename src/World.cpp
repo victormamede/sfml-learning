@@ -40,17 +40,17 @@ void World::buildScene()
   backgroundSprite->setPosition(_worldBounds.left, _worldBounds.top);
   _sceneLayers[Background]->addChild(std::move(backgroundSprite));
 
-  auto player = std::make_unique<Aircraft>(Aircraft::Type::Eagle, _textureHolder);
+  auto player = std::make_unique<Aircraft>(Aircraft::Type::Eagle, Category::Type::PlayerAircraft, _textureHolder);
   _player = player.get();
   _player->setPosition(_spawnPosition);
-  _player->setVelocity(40.f, _scrollSpeed);
+  _player->setVelocity(0.f, _scrollSpeed);
   _sceneLayers[Air]->addChild(std::move(player));
 
-  auto leftEscort = std::make_unique<Aircraft>(Aircraft::Type::Eagle, _textureHolder);
+  auto leftEscort = std::make_unique<Aircraft>(Aircraft::Type::Eagle, Category::Type::AlliedAircraft, _textureHolder);
   leftEscort->setPosition(-80.f, 50.f);
   _player->addChild(std::move(leftEscort));
 
-  auto rightEscort = std::make_unique<Aircraft>(Aircraft::Type::Eagle, _textureHolder);
+  auto rightEscort = std::make_unique<Aircraft>(Aircraft::Type::Eagle, Category::Type::AlliedAircraft, _textureHolder);
   rightEscort->setPosition(80.f, 50.f);
   _player->addChild(std::move(rightEscort));
 }
@@ -64,13 +64,17 @@ void World::draw()
 void World::update(sf::Time deltaTime)
 {
   _worldView.move(0.f, _scrollSpeed * deltaTime.asSeconds());
-  sf::Vector2f position = _player->getPosition();
-  sf::Vector2f velocity = _player->getVelocity();
 
-  if (position.x <= _worldBounds.left + 150 || position.x >= _worldBounds.left + _worldBounds.width - 150)
+  while (_commandQueue.size() > 0)
   {
-    velocity.x = -velocity.x;
-    _player->setVelocity(velocity);
+    _sceneGraph.onCommand(_commandQueue.front(), deltaTime);
+    _commandQueue.pop();
   }
+
   _sceneGraph.update(deltaTime);
+}
+
+CommandQueue &World::getCommandQueue()
+{
+  return _commandQueue;
 }

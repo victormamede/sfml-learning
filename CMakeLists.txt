@@ -10,6 +10,7 @@ set(SOURCES
       src/SceneNode.cpp
       src/World.cpp
       src/SpriteNode.cpp
+      src/Player.cpp
     )
 
 

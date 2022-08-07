@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 
+#include "Command.hpp"
+#include "Category.hpp"
+
 class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
 {
 public:
@@ -15,6 +18,8 @@ public:
   void addChild(SceneNodePtr child);
   SceneNodePtr removeChild(const SceneNode &child);
   sf::Transform getWorldTransform() const;
+  virtual unsigned int getCategory() const;
+  void onCommand(const Command &command, sf::Time deltaTime);
 
 private:
   std::vector<SceneNodePtr> _children;

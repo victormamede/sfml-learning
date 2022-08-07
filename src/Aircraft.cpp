@@ -11,7 +11,7 @@ Texture::Id aircraftTypeToTextureId(Aircraft::Type type)
   }
 }
 
-Aircraft::Aircraft(Type type, const TextureHolder &textureHolder) : _type(type), _sprite(textureHolder.get(aircraftTypeToTextureId(type)))
+Aircraft::Aircraft(Type type, Category::Type category, const TextureHolder &textureHolder) : _type(type), _category(category), _sprite(textureHolder.get(aircraftTypeToTextureId(type)))
 {
   sf::FloatRect bounds = _sprite.getLocalBounds();
   _sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -20,4 +20,14 @@ Aircraft::Aircraft(Type type, const TextureHolder &textureHolder) : _type(type),
 void Aircraft::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 {
   target.draw(_sprite, states);
+}
+
+void Aircraft::accelerate(sf::Vector2f acceleration)
+{
+  setVelocity(getVelocity() + acceleration);
+}
+
+unsigned int Aircraft::getCategory() const
+{
+  return (unsigned int)_category;
 }

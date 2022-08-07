@@ -1,7 +1,9 @@
 #include <algorithm>
 #include <cassert>
-#include "SceneNode.hpp"
 #include <iostream>
+#include <SFML/Graphics.hpp>
+
+#include "SceneNode.hpp"
 
 SceneNode::SceneNode() : _children(), _parent(nullptr)
 {
@@ -61,4 +63,18 @@ sf::Transform SceneNode::getWorldTransform() const
     return getTransform();
 
   return _parent->getTransform() * getTransform();
+}
+
+unsigned int SceneNode::getCategory() const
+{
+  return (unsigned int)Category::Type::Scene;
+}
+
+void SceneNode::onCommand(const Command &command, sf::Time deltaTime)
+{
+  if (command.category & getCategory())
+    command.action(*this, deltaTime);
+
+  for (const auto &child : _children)
+    child->onCommand(command, deltaTime);
 }

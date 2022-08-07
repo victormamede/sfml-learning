@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "World.hpp"
+#include "Player.hpp"
 
 class Game
 {
@@ -19,6 +20,7 @@ private:
   sf::Font _font;
   sf::Text _fpsCounter;
   World _world;
+  Player _player;
 
   void processEvents();
   void update(sf::Time deltaTime);

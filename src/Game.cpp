@@ -2,6 +2,7 @@
 #include <string>
 #include "Game.hpp"
 #include "Aircraft.hpp"
+#include "Command.hpp"
 
 const sf::Time TimePerFrame = sf::seconds(1.f / 60.f);
 
@@ -40,16 +41,17 @@ void Game::run()
 
 void Game::processEvents()
 {
+  CommandQueue &commands = _world.getCommandQueue();
+
   sf::Event event;
   while (_window.pollEvent(event))
   {
-    switch (event.type)
-    {
-    case sf::Event::Closed:
+    _player.handleEvent(event, commands);
+
+    if (event.type == sf::Event::Closed)
       _window.close();
-      break;
-    }
   }
+  _player.handleRealtimeInput(commands);
 }
 
 void Game::update(sf::Time deltaTime)
